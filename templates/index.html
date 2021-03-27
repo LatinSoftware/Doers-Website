@@ -1,0 +1,47 @@
+{% extends 'template.html' %}
+
+{% block body_title %}
+<h1 class="mt-4">Socios</h1>
+{% endblock %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Dashboard</li>
+</ol>
+{% endblock %}
+
+{% block main %}
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Listado de Socios
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Codigo Discord</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for user in users %}
+                    <tr>
+                        <td>{{user.name}}</td>
+                        <td>{{user.user_id}}</td>
+                        <td class="text-center">
+                            <a href="{{url_for('userDashboard', discordcode=user.user_id)}}" 
+                            role="button" type="button" class="btn btn-dark"> 
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> 
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
