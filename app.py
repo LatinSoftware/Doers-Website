@@ -45,3 +45,6 @@ def getQuery(filename):
     scriptname = os.path.join(DATADIR, filename+'.sql')
     usersScript = open(scriptname).read()
     return usersScript
+
+if __name__ == '__main__':
+    app.run(threaded=True, port=5000)
