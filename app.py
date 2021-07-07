@@ -4,8 +4,10 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from datetime import date
 import os
 
-
-engine = create_engine("postgresql://postgres:Kaoru7512@localhost:5432/doersbot")
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DATABASE_URL:
+    raise ValueError("No DATABASE_URL set for Flask application")
+engine = create_engine(DATABASE_URL)
 db = scoped_session(sessionmaker(bind=engine))
 app = Flask(__name__)
 
