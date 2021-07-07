@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block main %}
-<input type="hidden" id="usercode" value="{{discordcode.user_id}}"/>
+<input type="hidden" id="usercode" value="{{discordcode.discordId}}"/>
 <div class="row">
     <div class="col-xl-4 col-md-4">
         <div class="card bg-primary text-white mb-4">
@@ -42,8 +42,13 @@
         </div>
     </div>
 </div>
-<!--GRAFICOS-->
 <div class="row">
+    <div style="margin: 10px auto;">
+        <input class="form-control" type="text" name="dates" />
+    </div>
+</div>
+<!--GRAFICOS-->
+<div id="graph_container"class="row">
     <div class="col-xl-6">
         <div class="card mb-4">
             <div class="card-header">
@@ -114,6 +119,15 @@
                 Seguimiento
             </div>
             <div class="card-body"><canvas id="followChar" width="100%" height="40"></canvas></div>
+        </div>
+    </div>
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-bar mr-1"></i>
+                Volumen
+            </div>
+            <div class="card-body"><canvas id="volumen" width="100%" height="40"></canvas></div>
         </div>
     </div>
     <!-- <div class="col-xl-12">

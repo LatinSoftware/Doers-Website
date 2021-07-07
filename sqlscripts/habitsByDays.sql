@@ -1,14 +1,13 @@
-SELECT u.user_id, h.name as name,a.quantity as quantity, 
-a."createdAt"::TIMESTAMP::DATE as createdAt, a."updatedAt"::TIMESTAMP::DATE as updatedAt,
-uh.strike as strike 
-FROM actions as a
-INNER JOIN user_habits as uh
-ON a.user_habit_id = uh.id
-INNER JOIN users as u
-ON u.user_id = uh.user_id
-INNER JOIN habits as h
-ON h.id = uh.habit_id
-WHERE u.user_id = :user_id
-and a."createdAt"::TIMESTAMP::DATE <= :createdAt
-and a."createdAt"::TIMESTAMP::DATE >= :createdAt
-ORDER BY u.user_id, a."createdAt"::TIMESTAMP::DATE DESC
+SELECT 
+"UserHabits"."id" AS "UserHabits_id", 
+"UserHabits->Habit"."name" AS "UserHabits_Habit_name", 
+COALESCE("UserHabits->Action"."quantity", 0) AS "UserHabits_Action_quantity"
+FROM "Users" AS "Users" INNER JOIN "UserHabits" AS "UserHabits" 
+ON "Users"."id" = "UserHabits"."userId" 
+INNER JOIN "Habits" AS "UserHabits->Habit" 
+ON "UserHabits"."habitId" = "UserHabits->Habit"."id" 
+LEFT OUTER JOIN "Actions" AS "UserHabits->Action" 
+ON "UserHabits"."id" = "UserHabits->Action"."habitId" 
+AND "UserHabits->Action"."createdAt"::Date = NOW()::Date 
+ WHERE "Users"."discordId" = :discord_id
+ and "UserHabits->Habit"."frecuency" = 'daily' ;
