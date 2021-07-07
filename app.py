@@ -5,7 +5,7 @@ from datetime import date
 import os
 
 
-engine = create_engine("postgresql://rumvuoekqeumco:cc21e88da6b3f796f25dcff8ec377ec2f832b05103735f0f45197ea7d656e495@ec2-3-208-224-152.compute-1.amazonaws.com/d42ljngj20hedd")
+engine = create_engine("postgresql://postgres:Kaoru7512@localhost:5432/doersbot")
 db = scoped_session(sessionmaker(bind=engine))
 app = Flask(__name__)
 
@@ -20,23 +20,25 @@ def index():
 
 @app.route('/dashboard/<string:discordcode>')
 def userDashboard(discordcode):
-    user = db.execute("SELECT * FROM users where user_id = :user_id", {"user_id": discordcode}).fetchone()
+    user = db.execute('SELECT id, name, "discordId", strikes, birthday, active, "createdAt", "updatedAt" FROM public."Users" WHERE "discordId" = :user_id', 
+    {"user_id": discordcode}).fetchone()
     if(user):
         return render_template("dashboard.html", discordcode=user)
     return "hola mundo cruel"
 
-@app.route('/dashboard/getuserhabit/<string:discordcode>', methods=['GET'])
-def getUserHabits(discordcode):
-    user = db.execute(getQuery("habitsByMonth"), 
-    {"user_id": discordcode, 
-    "firstdayyear": f"{date.today().year}-01-01",  
-    "lastdayyear": f"{date.today().year}-12-31"}).fetchall()
-    return jsonify({"data": [dict(row) for row in user]})
+@app.route('/dashboard/gethabits', methods=['GET'])
+def getUserHabits():
+    data = db.execute(getQuery('habitsByDates'), {
+        "discord_id": request.args.get('discordcode'),
+        "datefrom": request.args.get('datefrom'),
+        "dateto": request.args.get('dateto')
+    })
+    return jsonify({"data": [dict(row) for row in data]})
 
 @app.route('/dashboard/getdayhabit/<string:discordcode>', methods=['GET'])
 def getDayHabits(discordcode):
     user = db.execute(getQuery("habitsByDays"), 
-    {"user_id": discordcode, "createdAt": date.today().strftime("%Y-%m-%d")}).fetchall()
+    {"discord_id": discordcode}).fetchall()
     return jsonify({"data": [dict(row) for row in user]})
    
 def getQuery(filename):
