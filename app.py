@@ -48,5 +48,9 @@ def getQuery(filename):
     usersScript = open(scriptname).read()
     return usersScript
 
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db.close()
+
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)
