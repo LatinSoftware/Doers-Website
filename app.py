@@ -4,7 +4,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from datetime import date
 import os
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = os.environ.get("DB_URL")
 if not DATABASE_URL:
     raise ValueError("No DATABASE_URL set for Flask application")
 engine = create_engine(DATABASE_URL)
